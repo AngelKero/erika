@@ -169,20 +169,12 @@
         </div>
         <h2 class="text-4xl md:text-6xl font-bold mb-4">El clic instantáneo</h2>
         <p class="text-lg md:text-2xl max-w-2xl">
-            Cada mensaje fue un recordatorio de lo fácil que era reír contigo, de cómo nuestras charlas se llenaban de gatitos, abejitas y chistes internos.
+            Cada mensaje fue un recordatorio de lo fácil que era conectar contigo, como si nuestras almas ya se conocieran.
         </p>
         <div class="flex flex-wrap justify-center gap-4 mt-8">
             <div class="memory-card">
-                <h3>Memes felinos</h3>
-                <p class="mt-2 text-slate-100/80">Tus stickers de gatitos fueron la prueba de que nuestras vibras eran perfectas desde el inicio.</p>
-            </div>
-            <div class="memory-card">
-                <h3>Abejas traviesas</h3>
-                <p class="mt-2 text-slate-100/80">Entre buzz y buzz, se cocinó la complicidad más dulce que he sentido.</p>
-            </div>
-            <div class="memory-card">
-                <h3>Noches infinitas</h3>
-                <p class="mt-2 text-slate-100/80">Hasta la madrugada, sin darnos cuenta de la hora, solo disfrutando de encontrarnos.</p>
+                <h3>Grrrr</h3>
+                <p class="mt-2 text-slate-100/80">Fuerza leona, ya casi acabas la carrera.</p>
             </div>
         </div>
     </section>
@@ -205,18 +197,18 @@
                 <path d="M23.55 0c-2.74 0-5.13 1.48-7.05 4.4C14.58 1.49 12.2 0 9.45 0 4.35 0 0 4.58 0 10.24c0 6.65 6.74 11.02 16.5 18.34 9.76-7.32 16.5-11.69 16.5-18.34C33 4.58 28.65 0 23.55 0Z" fill="#f472b6"/>
             </svg>
         </div>
-        <h2 id="scene3-h2" class="text-4xl md:text-6xl font-bold mb-6 z-10">Y ya son 8 meses...</h2>
+        <h2 id="scene3-h2" class="text-4xl md:text-6xl font-bold mb-6 z-10">Y ya son 8 meses de novios uwur...</h2>
         
         <!-- Contenedor del Video (Fondo Negro 16:9) -->
         <!-- Usamos Tailwind 'aspect-video' para forzar el 16:9 -->
-        <div id="video-container" class="w-full max-w-2xl aspect-video bg-black rounded-lg shadow-xl z-10 opacity-0">
+    <div id="video-container" class="w-full max-w-2xl aspect-video bg-black rounded-lg shadow-xl z-10">
             <!-- Si tuvieras el video, iría aquí: -->
             <video src="gato.mp4" loop autoplay disablepictureinpicture muted class="w-full h-full rounded-lg"></video>
             <!-- Por ahora es solo un cuadro negro como pediste -->
         </div>
 
-        <p id="dedicatoria-texto" class="text-xl md:text-2xl max-w-2xl z-10 mt-6 opacity-0">
-            Erika, eres muy especial para mi, pero ya bañate jksjkskjs
+    <p id="dedicatoria-texto" class="text-xl md:text-2xl max-w-2xl z-10 mt-6">
+            Erika, eres muy especial para mí, pero ya báñate jksjkskjs.
         </p>
     </section>
 
@@ -252,78 +244,262 @@
     </section>
 
     <script>
-        // --- Configuración de Animaciones GSAP ---
-
-        // Espera a que el documento esté listo
         document.addEventListener("DOMContentLoaded", () => {
-            
-            // GSAP usa "timelines" para organizar animaciones en secuencia
-            const tl = gsap.timeline();
+            const reduceMotionQuery = window.matchMedia("(prefers-reduced-motion: reduce)");
+            const reduceMotion = reduceMotionQuery.matches;
 
-            // --- Escena 1: Animación de Intro ---
-            tl.to("#scene1", { opacity: 1, duration: 1 }) // Aparece la escena 1
-              .to("#bumble-bee", { 
-                  opacity: 1, 
-                  y: -20, // Sube un poquito
-                  scale: 1.2, // Crece
-                  duration: 0.5 
-              })
-              .to("#bumble-bee", {
-                  rotate: 360, // Gira
-                  y: 50, // Baja
-                  duration: 1,
-                  delay: 0.5
-              })
-              // Anima el texto de la escena 1
-              .from("#scene1 h1", { opacity: 0, y: 20, duration: 0.5 }, "-=1") // "-=1" hace que empiece 1s antes
-              .from("#scene1 p", { opacity: 0, y: 20, duration: 0.5 }, "-=0.5");
+            if (typeof gsap === "undefined") {
+                return;
+            }
 
-            // --- Escena 2: El Clic ---
-            // Queremos que esta animación ocurra *después* de la escena 1
-            // Usamos .from() para animar DESDE un estado (oculto) AL estado actual (visible)
-            tl.from("#scene2", { 
-                opacity: 0, 
-                backgroundColor: "#FFF", // Flash blanco
-                duration: 0.5 
-            })
-            .to("#scene2", { opacity: 1, duration: 0.5 }) // Asegura que la escena 2 sea visible
-            .from("#scene2 h2", { 
-                scale: 3, // Empieza grande
-                opacity: 0, 
-                duration: 0.7, 
-                ease: "power2.out" // Efecto de "pop"
-            })
-            .from("#scene2 p", { opacity: 0, y: 30, duration: 0.5 });
+            if (typeof ScrollTrigger !== "undefined") {
+                gsap.registerPlugin(ScrollTrigger);
+            }
 
+            if (reduceMotion || typeof ScrollTrigger === "undefined") {
+                document.querySelectorAll(".scene").forEach(scene => {
+                    scene.style.opacity = 1;
+                });
+                ["#bumble-bee", "#video-container", "#dedicatoria-texto"].forEach(selector => {
+                    const element = document.querySelector(selector);
+                    if (element) {
+                        element.style.opacity = 1;
+                        element.classList.remove("opacity-0");
+                    }
+                });
+                return;
+            }
 
-            // --- Escena 3: Video y Dedicatoria ---
-            tl.to("#scene3", { opacity: 1, duration: 1 })
-              .from("#scene3-h2", { opacity: 0, y: 20, duration: 0.5 })
-              
-              // Animar el contenedor del video (empieza invisible y escalado)
-              .fromTo("#video-container", 
-                  { opacity: 0, scale: 0.8, y: 20 }, // Estado inicial
-                  { opacity: 1, scale: 1, y: 0, duration: 0.8, ease: "power2.out" } // Estado final
-              , "-=0.3") // Inicia un poco después del título
-              
-              // Animar la dedicatoria (empieza invisible y abajo)
-              .fromTo("#dedicatoria-texto",
-                  { opacity: 0, y: 30 },
-                  { opacity: 1, y: 0, duration: 0.5 }
-              , "-=0.4"); // Inicia casi al final de la anim del video
-              
+            setupScrollAnimations();
+            setupFloatingDecorations();
+            ScrollTrigger.refresh();
 
-            // --- Escena 4: Final ---
-            tl.to("#scene4", { opacity: 1, duration: 1 })
-              .from("#scene4 h2", { opacity: 0, scale: 0.5, duration: 1, ease: "back.out(1.7)" })
-              .from("#scene4 p", { opacity: 0, y: 20, duration: 0.5 });
-
-            // --- Hacer que GSAP controle el scroll (Opcional, pero genial) ---
-            // Esto hace que cada sección se "pegue" a la pantalla mientras se scrollea
-            // Necesitaríamos ScrollTrigger, que es un plugin extra.
-            // Por ahora, lo dejaremos como una secuencia automática al cargar la página.
-            // Si quieres que sea con scroll, ¡me avisas!
+            if (typeof reduceMotionQuery.addEventListener === "function") {
+                reduceMotionQuery.addEventListener("change", event => {
+                    if (event.matches) {
+                        window.location.reload();
+                    }
+                });
+            } else if (typeof reduceMotionQuery.addListener === "function") {
+                reduceMotionQuery.addListener(event => {
+                    if (event.matches) {
+                        window.location.reload();
+                    }
+                });
+            }
         });
+
+        function setupScrollAnimations() {
+            gsap.set(".scene", { opacity: 0 });
+
+            const scene1Tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: "#scene1",
+                    start: "top 80%",
+                    toggleActions: "play none none reverse"
+                }
+            });
+
+            scene1Tl
+                .to("#scene1", { opacity: 1, duration: 0.8 })
+                .to("#bumble-bee", {
+                    opacity: 1,
+                    y: -10,
+                    scale: 1.1,
+                    rotate: -10,
+                    duration: 0.8,
+                    ease: "power2.out"
+                }, "-=0.4")
+                .from("#scene1 h1", { opacity: 0, y: 30, duration: 0.6 }, "-=0.2")
+                .from("#scene1 p", { opacity: 0, y: 30, duration: 0.6 }, "-=0.4");
+
+            ScrollTrigger.create({
+                trigger: "#scene1",
+                start: "top 80%",
+                once: true,
+                onEnter: () => {
+                    gsap.to("#bumble-bee", {
+                        y: "+=12",
+                        rotate: "+=10",
+                        duration: 1.8,
+                        repeat: -1,
+                        yoyo: true,
+                        ease: "sine.inOut"
+                    });
+                }
+            });
+
+            const scene2Tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: "#scene2",
+                    start: "top 80%",
+                    toggleActions: "play none none reverse"
+                }
+            });
+
+            scene2Tl
+                .to("#scene2", { opacity: 1, duration: 0.8 })
+                .from("#scene2 h2", { opacity: 0, y: 30, duration: 0.6 })
+                .from("#scene2 p", { opacity: 0, y: 30, duration: 0.6 }, "-=0.3")
+                .from("#scene2 .memory-card", {
+                    opacity: 0,
+                    y: 40,
+                    duration: 0.5,
+                    stagger: 0.2
+                }, "-=0.2");
+
+            const scene3Tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: "#scene3",
+                    start: "top 80%",
+                    toggleActions: "play none none reverse"
+                }
+            });
+
+            scene3Tl
+                .to("#scene3", { opacity: 1, duration: 0.8 })
+                .from("#scene3-h2", { opacity: 0, y: 30, duration: 0.6 })
+                .from("#video-container", {
+                    scale: 0.85,
+                    y: 40,
+                    duration: 0.7,
+                    ease: "power2.out"
+                }, "-=0.2")
+                .from("#dedicatoria-texto", { opacity: 0, y: 30, duration: 0.6 }, "-=0.3");
+
+            const scene4Tl = gsap.timeline({
+                scrollTrigger: {
+                    trigger: "#scene4",
+                    start: "top 80%",
+                    toggleActions: "play none none reverse"
+                }
+            });
+
+            scene4Tl
+                .to("#scene4", { opacity: 1, duration: 0.8 })
+                .from("#scene4 h2", {
+                    opacity: 0,
+                    scale: 0.6,
+                    duration: 0.8,
+                    ease: "back.out(1.7)"
+                })
+                .from("#scene4 p", { opacity: 0, y: 30, duration: 0.6 }, "-=0.3");
+        }
+
+        function setupFloatingDecorations() {
+            const layer = document.createElement("div");
+            layer.id = "floating-layer";
+            document.body.appendChild(layer);
+
+            const heartSVG = `
+                <svg viewBox="0 0 32 29" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M23.55 0c-2.74 0-5.13 1.48-7.05 4.4C14.58 1.49 12.2 0 9.45 0 4.35 0 0 4.58 0 10.24c0 6.65 6.74 11.02 16.5 18.34 9.76-7.32 16.5-11.69 16.5-18.34C33 4.58 28.65 0 23.55 0Z" fill="#f472b6"/>
+                </svg>
+            `;
+
+            const beeSVG = `
+                <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                    <ellipse cx="32" cy="32" rx="18" ry="14" fill="#FFD166" stroke="#2D2A32" stroke-width="3"/>
+                    <path d="M18 28h28" stroke="#2D2A32" stroke-width="5" stroke-linecap="round"/>
+                    <path d="M20 36h24" stroke="#2D2A32" stroke-width="5" stroke-linecap="round"/>
+                    <ellipse cx="24" cy="24" rx="8" ry="6" fill="#fff" stroke="#2D2A32" stroke-width="3" opacity="0.85"/>
+                    <ellipse cx="40" cy="24" rx="8" ry="6" fill="#fff" stroke="#2D2A32" stroke-width="3" opacity="0.85"/>
+                    <circle cx="26" cy="22" r="2.5" fill="#2D2A32"/>
+                    <circle cx="38" cy="22" r="2.5" fill="#2D2A32"/>
+                    <path d="M30 18c-2-6-6-10-10-12" stroke="#2D2A32" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+            `;
+
+            const catSVG = `
+                <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M14 28 L10 10 L24 22" fill="#FEC3A6" stroke="#2E1F1C" stroke-width="3" stroke-linejoin="round"/>
+                    <path d="M50 28 L54 10 L40 22" fill="#FEC3A6" stroke="#2E1F1C" stroke-width="3" stroke-linejoin="round"/>
+                    <circle cx="32" cy="36" r="22" fill="#FCD7B6" stroke="#2E1F1C" stroke-width="3"/>
+                    <circle cx="24" cy="34" r="3" fill="#2E1F1C"/>
+                    <circle cx="40" cy="34" r="3" fill="#2E1F1C"/>
+                    <path d="M24 46c2 2 6 2 8 0" stroke="#2E1F1C" stroke-width="3" stroke-linecap="round"/>
+                </svg>
+            `;
+
+            createFloatingIcons(layer, {
+                type: "heart",
+                count: 20,
+                svg: heartSVG,
+                sizeRange: [28, 72],
+                animate: element => {
+                    const drift = gsap.utils.random(120, 220);
+                    gsap.to(element, {
+                        y: `-=${drift}`,
+                        duration: gsap.utils.random(6, 11),
+                        repeat: -1,
+                        yoyo: true,
+                        ease: "sine.inOut",
+                        delay: gsap.utils.random(0, 5),
+                        rotation: gsap.utils.random(-18, 18)
+                    });
+                }
+            });
+
+            createFloatingIcons(layer, {
+                type: "bee",
+                count: 12,
+                svg: beeSVG,
+                sizeRange: [36, 64],
+                animate: element => {
+                    gsap.to(element, {
+                        x: `+=${gsap.utils.random(100, 220)}`,
+                        y: `+=${gsap.utils.random(-30, 30)}`,
+                        duration: gsap.utils.random(8, 14),
+                        repeat: -1,
+                        yoyo: true,
+                        ease: "sine.inOut",
+                        delay: gsap.utils.random(0, 4),
+                        rotation: gsap.utils.random(-10, 10)
+                    });
+                }
+            });
+
+            createFloatingIcons(layer, {
+                type: "cat",
+                count: 10,
+                svg: catSVG,
+                sizeRange: [48, 72],
+                animate: element => {
+                    gsap.to(element, {
+                        x: `+=${gsap.utils.random(-40, 40)}`,
+                        y: `+=${gsap.utils.random(-20, 20)}`,
+                        duration: gsap.utils.random(10, 18),
+                        repeat: -1,
+                        yoyo: true,
+                        ease: "sine.inOut",
+                        delay: gsap.utils.random(0, 5),
+                        rotation: gsap.utils.random(-6, 6)
+                    });
+                }
+            });
+        }
+
+        function createFloatingIcons(layer, options) {
+            for (let i = 0; i < options.count; i++) {
+                const wrapper = document.createElement("div");
+                wrapper.className = `floating-icon floating-icon--${options.type}`;
+                wrapper.innerHTML = options.svg.trim();
+                layer.appendChild(wrapper);
+
+                const size = gsap.utils.random(options.sizeRange[0], options.sizeRange[1]);
+                gsap.set(wrapper, {
+                    width: size,
+                    x: gsap.utils.random(0, window.innerWidth),
+                    y: gsap.utils.random(0, window.innerHeight),
+                    opacity: gsap.utils.random(0.35, 0.75),
+                    scale: gsap.utils.random(0.85, 1.15)
+                });
+
+                if (typeof options.animate === "function") {
+                    options.animate(wrapper);
+                }
+            }
+        }
     </script>
 
 </body>
