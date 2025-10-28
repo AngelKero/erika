@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Para ti <3</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playpen+Sans:wght@300;400;600&display=swap');
+
+        body {
+            font-family: 'Playpen Sans', cursive;
+            background-color: #1a1a1a;
+            color: #f0f0f0;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .scene {
+            height: 100vh;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 2.5rem 1.5rem;
+            text-align: center;
+            box-sizing: border-box;
+            opacity: 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        #floating-layer {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 5;
+        }
+
+        .floating-icon {
+            position: absolute;
+            will-change: transform;
+            filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.25));
+        }
+
+        .floating-icon svg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .memory-card {
+            background: rgba(255, 255, 255, 0.16);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            max-width: 18rem;
+            color: inherit;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 20px 35px rgba(0, 0, 0, 0.2);
+        }
+
+        .memory-card h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .memory-card p {
+            font-size: 0.95rem;
+        }
+
+        .scene-badge {
+            position: absolute;
+            width: 5rem;
+            opacity: 0.28;
+            pointer-events: none;
+        }
+
+        .scene-badge svg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .scene-badge--top-right {
+            top: 1.5rem;
+            right: 1.5rem;
+        }
+
+        .scene-badge--bottom-left {
+            bottom: 1.5rem;
+            left: 1.5rem;
+        }
+
+        .scene-badge--top-left {
+            top: 1.5rem;
+            left: 1.5rem;
+        }
+
+        .scene-badge--bottom-right {
+            bottom: 1.5rem;
+            right: 1.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .scene {
+                padding: 2rem 1.25rem;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-900 text-white">
+
+    <!-- Escena 1: El Inicio (Bumble) -->
+    <section id="scene1" class="scene bg-yellow-400 text-gray-900">
+        <div class="scene-badge scene-badge--top-right">
+            <svg viewBox="0 0 32 29" xmlns="http://www.w3.org/2000/svg">
+                <path d="M23.55 0c-2.74 0-5.13 1.48-7.05 4.4C14.58 1.49 12.2 0 9.45 0 4.35 0 0 4.58 0 10.24c0 6.65 6.74 11.02 16.5 18.34 9.76-7.32 16.5-11.69 16.5-18.34C33 4.58 28.65 0 23.55 0Z" fill="#f472b6"/>
+            </svg>
+        </div>
+        <div class="scene-badge scene-badge--bottom-left">
+            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14 28 L10 10 L24 22" fill="#FEC3A6" stroke="#2E1F1C" stroke-width="3" stroke-linejoin="round"/>
+                <path d="M50 28 L54 10 L40 22" fill="#FEC3A6" stroke="#2E1F1C" stroke-width="3" stroke-linejoin="round"/>
+                <circle cx="32" cy="36" r="22" fill="#FCD7B6" stroke="#2E1F1C" stroke-width="3"/>
+                <circle cx="24" cy="34" r="3" fill="#2E1F1C"/>
+                <circle cx="40" cy="34" r="3" fill="#2E1F1C"/>
+                <path d="M24 46c2 2 6 2 8 0" stroke="#2E1F1C" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <svg id="bumble-bee" class="w-24 h-24 mb-6 opacity-0" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- Cuerpo de la abeja -->
+            <path fill="#FFD700" d="M100 50 C130 50 150 70 150 100 C150 130 130 150 100 150 C70 150 50 130 50 100 C50 70 70 50 100 50 Z"/>
+            <!-- Rayas -->
+            <path stroke="#000000" stroke-width="10" d="M60 90 Q100 80 140 90"/>
+            <path stroke="#000000" stroke-width="10" d="M65 110 Q100 100 135 110"/>
+            <path stroke="#000000" stroke-width="10" d="M75 130 Q100 120 125 130"/>
+            <!-- Ojos -->
+            <circle fill="#000000" cx="85" cy="85" r="8"/>
+            <circle fill="#000000" cx="115" cy="85" r="8"/>
+            <!-- Alas -->
+            <path fill="#FFFFFF" stroke="#000000" stroke-width="2" d="M80 50 C60 30 70 10 90 30 C100 40 90 50 80 50 Z"/>
+            <path fill="#FFFFFF" stroke="#000000" stroke-width="2" d="M120 50 C140 30 130 10 110 30 C100 40 110 50 120 50 Z"/>
+        </svg>
+        <h1 class="text-4xl md:text-6xl font-bold mb-4">Hace 1 año...</h1>
+        <p class="text-xl md:text-3xl">Todo comenzó con un "match".</p>
+    </section>
+
+    <!-- Escena 2: Recuerdos Felinos y Zumbidos -->
+    <section id="scene2" class="scene bg-purple-600 text-slate-100">
+        <div class="scene-badge scene-badge--top-left">
+            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14 28 L10 10 L24 22" fill="#FEC3A6" stroke="#2E1F1C" stroke-width="3" stroke-linejoin="round"/>
+                <path d="M50 28 L54 10 L40 22" fill="#FEC3A6" stroke="#2E1F1C" stroke-width="3" stroke-linejoin="round"/>
+                <circle cx="32" cy="36" r="22" fill="#FCD7B6" stroke="#2E1F1C" stroke-width="3"/>
+                <circle cx="24" cy="34" r="3" fill="#2E1F1C"/>
+                <circle cx="40" cy="34" r="3" fill="#2E1F1C"/>
+                <path d="M24 46c2 2 6 2 8 0" stroke="#2E1F1C" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <div class="scene-badge scene-badge--bottom-right">
+            <svg viewBox="0 0 32 29" xmlns="http://www.w3.org/2000/svg">
+                <path d="M23.55 0c-2.74 0-5.13 1.48-7.05 4.4C14.58 1.49 12.2 0 9.45 0 4.35 0 0 4.58 0 10.24c0 6.65 6.74 11.02 16.5 18.34 9.76-7.32 16.5-11.69 16.5-18.34C33 4.58 28.65 0 23.55 0Z" fill="#f472b6"/>
+            </svg>
+        </div>
+        <h2 class="text-4xl md:text-6xl font-bold mb-4">El clic instantáneo</h2>
+        <p class="text-lg md:text-2xl max-w-2xl">
+            Cada mensaje fue un recordatorio de lo fácil que era reír contigo, de cómo nuestras charlas se llenaban de gatitos, abejitas y chistes internos.
+        </p>
+        <div class="flex flex-wrap justify-center gap-4 mt-8">
+            <div class="memory-card">
+                <h3>Memes felinos</h3>
+                <p class="mt-2 text-slate-100/80">Tus stickers de gatitos fueron la prueba de que nuestras vibras eran perfectas desde el inicio.</p>
+            </div>
+            <div class="memory-card">
+                <h3>Abejas traviesas</h3>
+                <p class="mt-2 text-slate-100/80">Entre buzz y buzz, se cocinó la complicidad más dulce que he sentido.</p>
+            </div>
+            <div class="memory-card">
+                <h3>Noches infinitas</h3>
+                <p class="mt-2 text-slate-100/80">Hasta la madrugada, sin darnos cuenta de la hora, solo disfrutando de encontrarnos.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Escena 3: 8 Meses y Video -->
+    <section id="scene3" class="scene bg-gray-900 text-pink-300">
+        <div class="scene-badge scene-badge--top-right">
+            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="32" cy="32" rx="18" ry="14" fill="#FFD166" stroke="#2D2A32" stroke-width="3"/>
+                <path d="M18 28h28" stroke="#2D2A32" stroke-width="5" stroke-linecap="round"/>
+                <path d="M20 36h24" stroke="#2D2A32" stroke-width="5" stroke-linecap="round"/>
+                <ellipse cx="24" cy="24" rx="8" ry="6" fill="#fff" stroke="#2D2A32" stroke-width="3" opacity="0.85"/>
+                <ellipse cx="40" cy="24" rx="8" ry="6" fill="#fff" stroke="#2D2A32" stroke-width="3" opacity="0.85"/>
+                <circle cx="26" cy="22" r="2.5" fill="#2D2A32"/>
+                <circle cx="38" cy="22" r="2.5" fill="#2D2A32"/>
+            </svg>
+        </div>
+        <div class="scene-badge scene-badge--bottom-left">
+            <svg viewBox="0 0 32 29" xmlns="http://www.w3.org/2000/svg">
+                <path d="M23.55 0c-2.74 0-5.13 1.48-7.05 4.4C14.58 1.49 12.2 0 9.45 0 4.35 0 0 4.58 0 10.24c0 6.65 6.74 11.02 16.5 18.34 9.76-7.32 16.5-11.69 16.5-18.34C33 4.58 28.65 0 23.55 0Z" fill="#f472b6"/>
+            </svg>
+        </div>
+        <h2 id="scene3-h2" class="text-4xl md:text-6xl font-bold mb-6 z-10">Y ya son 8 meses...</h2>
+        
+        <!-- Contenedor del Video (Fondo Negro 16:9) -->
+        <!-- Usamos Tailwind 'aspect-video' para forzar el 16:9 -->
+        <div id="video-container" class="w-full max-w-2xl aspect-video bg-black rounded-lg shadow-xl z-10 opacity-0">
+            <!-- Si tuvieras el video, iría aquí: -->
+            <video src="gato.mp4" loop autoplay disablepictureinpicture muted class="w-full h-full rounded-lg"></video>
+            <!-- Por ahora es solo un cuadro negro como pediste -->
+        </div>
+
+        <p id="dedicatoria-texto" class="text-xl md:text-2xl max-w-2xl z-10 mt-6 opacity-0">
+            Erika, eres muy especial para mi, pero ya bañate jksjkskjs
+        </p>
+    </section>
+
+    <!-- Escena 4: Mensaje Final -->
+    <section id="scene4" class="scene bg-red-500 text-white">
+        <div class="scene-badge scene-badge--top-left">
+            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                <ellipse cx="32" cy="32" rx="18" ry="14" fill="#FFD166" stroke="#2D2A32" stroke-width="3"/>
+                <path d="M18 28h28" stroke="#2D2A32" stroke-width="5" stroke-linecap="round"/>
+                <path d="M20 36h24" stroke="#2D2A32" stroke-width="5" stroke-linecap="round"/>
+                <ellipse cx="24" cy="24" rx="8" ry="6" fill="#fff" stroke="#2D2A32" stroke-width="3" opacity="0.85"/>
+                <ellipse cx="40" cy="24" rx="8" ry="6" fill="#fff" stroke="#2D2A32" stroke-width="3" opacity="0.85"/>
+                <circle cx="26" cy="22" r="2.5" fill="#2D2A32"/>
+                <circle cx="38" cy="22" r="2.5" fill="#2D2A32"/>
+            </svg>
+        </div>
+        <div class="scene-badge scene-badge--bottom-right">
+            <svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg">
+                <path d="M14 28 L10 10 L24 22" fill="#FEC3A6" stroke="#2E1F1C" stroke-width="3" stroke-linejoin="round"/>
+                <path d="M50 28 L54 10 L40 22" fill="#FEC3A6" stroke="#2E1F1C" stroke-width="3" stroke-linejoin="round"/>
+                <circle cx="32" cy="36" r="22" fill="#FCD7B6" stroke="#2E1F1C" stroke-width="3"/>
+                <circle cx="24" cy="34" r="3" fill="#2E1F1C"/>
+                <circle cx="40" cy="34" r="3" fill="#2E1F1C"/>
+                <path d="M24 46c2 2 6 2 8 0" stroke="#2E1F1C" stroke-width="3" stroke-linecap="round"/>
+            </svg>
+        </div>
+        <h2 class="text-4xl md:text-6xl font-bold mb-4">¡Feliz Aniversario!</h2>
+        <p class="text-xl md:text-3xl max-w-2xl">
+            (O felices 8 meses / 1 año de conocernos)
+            <br>
+            Te quiero mucho.
+        </p>
+    </section>
+
+    <script>
+        // --- Configuración de Animaciones GSAP ---
+
+        // Espera a que el documento esté listo
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            // GSAP usa "timelines" para organizar animaciones en secuencia
+            const tl = gsap.timeline();
+
+            // --- Escena 1: Animación de Intro ---
+            tl.to("#scene1", { opacity: 1, duration: 1 }) // Aparece la escena 1
+              .to("#bumble-bee", { 
+                  opacity: 1, 
+                  y: -20, // Sube un poquito
+                  scale: 1.2, // Crece
+                  duration: 0.5 
+              })
+              .to("#bumble-bee", {
+                  rotate: 360, // Gira
+                  y: 50, // Baja
+                  duration: 1,
+                  delay: 0.5
+              })
+              // Anima el texto de la escena 1
+              .from("#scene1 h1", { opacity: 0, y: 20, duration: 0.5 }, "-=1") // "-=1" hace que empiece 1s antes
+              .from("#scene1 p", { opacity: 0, y: 20, duration: 0.5 }, "-=0.5");
+
+            // --- Escena 2: El Clic ---
+            // Queremos que esta animación ocurra *después* de la escena 1
+            // Usamos .from() para animar DESDE un estado (oculto) AL estado actual (visible)
+            tl.from("#scene2", { 
+                opacity: 0, 
+                backgroundColor: "#FFF", // Flash blanco
+                duration: 0.5 
+            })
+            .to("#scene2", { opacity: 1, duration: 0.5 }) // Asegura que la escena 2 sea visible
+            .from("#scene2 h2", { 
+                scale: 3, // Empieza grande
+                opacity: 0, 
+                duration: 0.7, 
+                ease: "power2.out" // Efecto de "pop"
+            })
+            .from("#scene2 p", { opacity: 0, y: 30, duration: 0.5 });
+
+
+            // --- Escena 3: Video y Dedicatoria ---
+            tl.to("#scene3", { opacity: 1, duration: 1 })
+              .from("#scene3-h2", { opacity: 0, y: 20, duration: 0.5 })
+              
+              // Animar el contenedor del video (empieza invisible y escalado)
+              .fromTo("#video-container", 
+                  { opacity: 0, scale: 0.8, y: 20 }, // Estado inicial
+                  { opacity: 1, scale: 1, y: 0, duration: 0.8, ease: "power2.out" } // Estado final
+              , "-=0.3") // Inicia un poco después del título
+              
+              // Animar la dedicatoria (empieza invisible y abajo)
+              .fromTo("#dedicatoria-texto",
+                  { opacity: 0, y: 30 },
+                  { opacity: 1, y: 0, duration: 0.5 }
+              , "-=0.4"); // Inicia casi al final de la anim del video
+              
+
+            // --- Escena 4: Final ---
+            tl.to("#scene4", { opacity: 1, duration: 1 })
+              .from("#scene4 h2", { opacity: 0, scale: 0.5, duration: 1, ease: "back.out(1.7)" })
+              .from("#scene4 p", { opacity: 0, y: 20, duration: 0.5 });
+
+            // --- Hacer que GSAP controle el scroll (Opcional, pero genial) ---
+            // Esto hace que cada sección se "pegue" a la pantalla mientras se scrollea
+            // Necesitaríamos ScrollTrigger, que es un plugin extra.
+            // Por ahora, lo dejaremos como una secuencia automática al cargar la página.
+            // Si quieres que sea con scroll, ¡me avisas!
+        });
+    </script>
+
+</body>
+</html>
+
